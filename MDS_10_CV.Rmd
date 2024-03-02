@@ -1,0 +1,73 @@
+---
+title: "MDS_10_CV"
+output: html_document
+date: "2024-02-06"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(data.table)
+library(pander)
+library(REddyProc)
+library(lubridate)
+library(tidyverse)
+
+project_dir <- "E:/13 Gapfill/gapfill_NEE_U50/AmeriFlux/"
+train_data_dir <- paste(project_dir, "data_train_test", sep = "")
+prediction_dir <- paste(project_dir, "MDS_prediction/", sep = "")
+performance_dir <- paste(project_dir, "MDS_test_performance/", sep = "")
+if (!file.exists(train_data_dir)) dir.create(train_data_dir, recursive = TRUE)
+if (!file.exists(prediction_dir)) dir.create(prediction_dir, recursive = TRUE)
+if (!file.exists(performance_dir)) dir.create(performance_dir, recursive = TRUE)
+source_dir = "E:/source/"; setwd(source_dir); source("calculate_metrics.R")
+```
+
+# load EProc object
+```{r}
+setwd("E:/13 Gapfill/MDS_2010-2022/"); EProc = readRDS("EProc_2010-2022.RDS")
+EProc_start = EProc
+```
+
+# do MDS
+```{r}
+for (i in 1:10) {
+  setwd(train_data_dir)
+  EProc = EProc_start 
+  train <- data.table::fread(paste0("train", i, ".csv"))
+  EProc$sTEMP$NEE_U50_orig <- train$NEE_U50_orig
+  EProc$sMDSGapFill('NEE_U50_orig')
+  NEE_U50_f <- EProc$sTEMP$NEE_U50_f
+  df.prediction <- cbind(train[, 1:7],train$TIMESTAMP_END, train$Month, train$Time, EProc$sTEMP$NEE_U50_orig,EProc$sTEMP$NEE_U50_f, EProc$sTEMP$NEE_U50_fall)
+
+  names(df.prediction) <- c("INDEX", "Year", "Day", "Hour", "Date", "Min", "NEE","TIMESTAMP_END","Month", "Time", "NEE_U50_orig","NEE_U50_f", "NEE_U50_fall")
+  data.table::fwrite(df.prediction, file = paste0(prediction_dir, "MDS_all_prediction_fold", i, ".csv"), row.names = FALSE)
+  
+  # Load the test set
+  test <-  data.table::fread(paste0("test", i, ".csv"))
+  truth <- test$NEE_U50_orig
+  prediction <- df.prediction$NEE_U50_fall
+  df.metrics <- calculate_metrics(truth, prediction)
+  write.csv(df.metrics, file = paste0(performance_dir, "test_performance_fold", i, ".csv"), row.names = FALSE)
+}
+```
+# save combined df: test performance from 10 folds
+```{r}
+setwd(performance_dir)
+file_names <- list.files(pattern = "\\.csv$", full.names = TRUE)
+performance_data <- list()
+
+# Loop through each file and read it into a data frame
+for (file_name in file_names) {
+  # Read the file into a data frame
+  file_path <- file.path( file_name)
+  performance_df <- read.csv(file_path)
+  
+  # Store the data frame in the list
+  performance_data[[file_name]] <- performance_df
+}
+
+combined_df <- do.call(rbind, performance_data)
+write.csv(combined_df, "summary_MDS_test_performance.csv")
+```
+
+
