@@ -13,7 +13,7 @@ library(tidyverse)
 
 set.seed(2000)
 setwd(data_dir)
-file <- "US-Bar_for_gapfilling_since_2004.txt"
+file <- "US-Bar_for_gapfilling.txt"
 base_df <- read.table(paste0(data_dir, file), header = T)
 head(base_df)
 base_df[base_df == -9999] <- NA
