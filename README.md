@@ -20,9 +20,9 @@ The script utilizes BayesSearchCV from scikit-optimize, efficiently completing t
 - 01: Finding the best hyperparameters for XGBoost.
 - 02: Training the model using the best hyperparameters determined in Step 1.
 - 03: Evaluating the model performance using 10-fold cross-validation. Several model performance metrics (RMSE, R2, and bias) are computed, and learning curves are plotted.
-- 04: Plot Feature (variable) importance 
-- 05: Compute annual sums of FCO2
-- 06: Compute monthly sums of FCO2
+- 04: Plotting Feature (variable) importance 
+- 05: Computing annual sums of FCO2
+- 06: Computing monthly sums of FCO2
 
 STEP 03 MDS_10_CV.Rmd
 - Gap filling using MDS, following the same cross-validation (10 fold) to ensure the best comparison between MDS and XGB.
