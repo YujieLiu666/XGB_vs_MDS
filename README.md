@@ -16,9 +16,13 @@ STEP 01 MDS_EProc_object.R
 - save RDS object for future use
 
 STEP 02 train_XGB.ipynb
-- Input data: input.csv
-- XGBoost (XGB) to gapfill FCO2
-- 10 fold cross validation is used
+The script utilizes BayesSearchCV from scikit-optimize, efficiently completing the gap-filling of a 13-year time series with XGBoost (XGB) for FCO2 in approximately 20 minutes. It employs 10-fold cross-validation for model evaluation. This script consists of the following steps:
+- 01: Finding the best hyperparameters for XGBoost.
+- 02: Training the model using the best hyperparameters determined in Step 1.
+- 03: Evaluating the model performance using 10-fold cross-validation. Several model performance metrics (RMSE, R2, and bias) are computed, and learning curves are plotted.
+- 04: Plot Feature (variable) importance 
+- 05: Compute annual sums of FCO2
+- 06: Compute monthly sums of FCO2
 
 STEP 03 MDS_10_CV.Rmd
 - Gap filling using MDS, following the same cross-validation (10 fold) to ensure the best comparison between MDS and XGB.
