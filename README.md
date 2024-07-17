@@ -13,7 +13,7 @@ This repository provides code for gap-filling carbon flux data measured with edd
 STEP 01 MDS_EProc_object.R
 - IQR fitering
 - u* filtering
-- save RDS object for future use
+- save RDS object 
 
 STEP 02 train_XGB.ipynb
 The script utilizes BayesSearchCV from scikit-optimize, efficiently completing the gap-filling of a 13-year time series with XGBoost (XGB) for FCO2 in approximately 20 minutes. It employs 10-fold cross-validation for model evaluation. This script consists of the following steps:
