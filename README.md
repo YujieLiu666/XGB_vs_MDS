@@ -28,7 +28,7 @@ STEP 03 MDS_10_CV.Rmd
 - Gap filling using MDS, following the same cross-validation (10 fold) to ensure the best comparison between MDS and XGB.
 
 STEP 04 ANN_create_synthetic_data.ipynb
-- The script was executed on Google Colab with the purpose of generating synthetic data using an Artificial Neural Network (ANN). The script is adapted Vekuri et al. 2023, https://doi.org/10.1038/s41598-023-28827-2
+- The script was executed on Google Colab with the purpose of generating synthetic data using an Artificial Neural Network (ANN). The script is adapted from Vekuri et al. 2023, https://doi.org/10.1038/s41598-023-28827-2, by adding GCC as input feature.
 
 STEP 05 generate_data_for_scenarios.Rmd
 - To generate data for different experimental scenario 1,2 and 3, as described in the manuscript.
